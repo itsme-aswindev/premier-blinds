@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant Drapes | Product Showcase</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #e74c3c;
+            --text-color: #333;
+            --bg-color: #fff;
+            --card-bg: #f8f9fa;
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --filter-bg: rgba(255, 255, 255, 0.9);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #3498db;
+            --secondary-color: #e74c3c;
+            --text-color: #fff;
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --nav-bg: rgba(26, 26, 26, 0.95);
+            --filter-bg: rgba(26, 26, 26, 0.9);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-top: 60px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--nav-bg);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .home-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .home-button:hover {
+            background: var(--primary-color);
+            color: var(--bg-color);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: var(--primary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            position: sticky;
+            top: 60px;
+            background: var(--filter-bg);
+            padding: 1rem 2rem;
+            z-index: 900;
+            backdrop-filter: blur(5px);
+        }
+
+        .filter-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-button {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--primary-color);
+            border-radius: 20px;
+            background: none;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-button.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .product-image {
+            position: relative;
+            height: 250px;
+            background: url('/api/placeholder/400/250') center/cover;
+            overflow: hidden;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .product-details {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .product-description {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-button {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .action-button:hover {
+            color: var(--primary-color);
+        }
+
+        /* Quick View Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1100;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-color);
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .filter-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+            }
+
+            .modal-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="home-button">
+            <i class="fas fa-home"></i>
+            Back to Home
+        </a>
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
+  <!--
+    <section class="filter-section">
+        <div class="filter-container">
+            <button class="filter-button active">All Products</button>
+            <button class="filter-button">Sheer Curtains</button>
+            <button class="filter-button">Blackout Curtains</button>
+            <button class="filter-button">Velvet Curtains</button>
+            <button class="filter-button">Decorative Panels</button>
+        </div>
+    </section> -->
+
+    <div class="product-grid">
+
+        <!-- Product 1 -->
+        <div class="product-card" data-category="sheer">
+    <div class="product-image" style="background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.k_ExA6CQ0SCyJFmZShHhFAHaFM%26pid%3DApi&f=1&ipt=8c2cf1541f7486dc78c3aa53047baee73930079812c7c53523c87e7681c91ffc&ipo=images');">
+        <span class="product-badge">New Arrival</span>
+    </div>
+    <div class="product-details">
+        <h3 class="product-title">Premium Sheer Curtain</h3>
+        <p class="product-description">Elegant sheer curtains that provide privacy while allowing natural light to filter through.</p>
+        <div class="product-meta">
+            <span class="product-price">$129.99</span>
+            <div class="product-actions">
+                <button class="action-button" onclick="openQuickView(this)">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="action-button">
+                    <i class="fas fa-heart"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <!-- Repeated for other products with different details -->
+        <!-- Product 2 -->
+        <div class="product-card" data-category="blackout">
+            <div class="product-image" style="background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.JouZT3UAAb2b1MObYYP9nwHaEo%26pid%3DApi&f=1&ipt=81021019eaeff1756d20bd3630ad5fcded8518c11b4490d938939d18f6d0b5ba&ipo=images');">
+                <span class="product-badge">Best Seller</span>
+            </div>
+            <div class="product-details">
+                <h3 class="product-title">Luxury Blackout Curtain</h3>
+                <p class="product-description">Complete darkness for your bedroom with our premium blackout technology.</p>
+                <div class="product-meta">
+                    <span class="product-price">$159.99</span>
+                    <div class="product-actions">
+                        <button class="action-button" onclick="openQuickView(this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-button">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add more product cards here... -->
+    </div>
+
+    <!-- Quick View Modal -->
+    <div class="modal" id="quickViewModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeQuickView()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle i');
+
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                themeToggle.className = 'fas fa-moon';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.className = 'fas fa-sun';
+            }
+        }
+
+        // Filter Functionality
+        const filterButtons = document.querySelectorAll('.filter-button');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                button.classList.add('active');
+
+                // Filter implementation would go here
+                // This would filter the products based on the selected category
+            });
+        });
+
+        // Quick View Functionality
+        function openQuickView(button) {
+            const modal = document.getElementById('quickViewModal');
+            const modalContent = document.getElementById('modalContent');
+            const productCard = button.closest('.product-card');
+
+            // Clone the product details and add to modal
+            const details = productCard.querySelector('.product-details').cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(details);
+
+            modal.classList.add('active');
+        }
+
+        function closeQuickView() {
+            const modal = document.getElementById('quickViewModal');
+            modal.classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('quickViewModal').addEventListener('click', (e) => {
+            if (e.target.id === 'quickViewModal') {
+                closeQuickView();
+            }
+        });
+    </script>
+</body>
+</html>

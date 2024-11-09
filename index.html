@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premier Blinds</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #e74c3c;
+            --text-color: #333;
+            --bg-color: #fff;
+            --card-bg: #f8f9fa;
+            --nav-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #3498db;
+            --secondary-color: #e74c3c;
+            --text-color: #fff;
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --nav-bg: rgba(26, 26, 26, 0.95);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .burger-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        @media (max-width: 768px) {
+            .burger-menu {
+                display: block;
+            }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                height: 100vh;
+                width: 70%;
+                background: var(--nav-bg);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 2rem;
+                transition: right 0.3s ease;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                        url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.K_rZMEnDcILtbpdzR2boRwHaEK%26pid%3DApi&f=1&ipt=79d4bd4f6efdce393b0a96bc0c9290fcd115fff326aac2dae3a047d939ce7592&ipo=images') center/cover;
+            color: white;
+            perspective: 1000px;
+        }
+
+        .hero-content {
+            transform-style: preserve-3d;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotateX(0); }
+            50% { transform: translateY(-20px) rotateX(5deg); }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-btn {
+            padding: 1rem 2rem;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px) rotateX(10deg);
+        }
+
+        /* About Section */
+        .about {
+            padding: 5rem 2rem;
+            background: var(--bg-color);
+        }
+
+        .about-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-image {
+            height: 400px;
+            background: url('https://premierblinds.com.au/images/widgets/services/premier_blinds_brisbane_09.jpg') center/cover;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: transform 0.5s ease;
+        }
+
+        .about-image:hover {
+            transform: perspective(1000px) rotateY(0deg);
+        }
+
+        .about-text {
+            padding: 2rem;
+        }
+
+        .about-text h2 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        /* Products Section */
+        .products {
+            padding: 5rem 2rem;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px) rotateY(5deg);
+        }
+
+        .product-image {
+            height: 200px;
+            background: url('/api/placeholder/400/200') center/cover;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 5rem 2rem;
+            background: var(--card-bg);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--bg-color);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Updated Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            right: 20px;
+            top: 80px;
+            z-index: 999;
+            background: var(--primary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        /* Scroll to Top */
+        .scroll-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--secondary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+        }
+
+        /* Contact Form */
+        .contact {
+            padding: 5rem 2rem;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* Responsive Design Updates */
+        @media (max-width: 768px) {
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .about-image {
+                height: 300px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .product-grid {
+              grid-template-columns: 1fr;
+            }
+            .testimonial-grid {
+              grid-template-columns: 1fr;
+            }
+            .contact-form{
+              grid-template-columns: 1fr;
+            }
+            .theme-toggle {
+                top: 20px;
+                right: 80px;
+            }
+        }
+
+        /* Services Section */
+        .services {
+            padding: 5rem 2rem;
+            background: var(--card-bg);
+        }
+
+        .services-grid {
+            max-width: 1200px;
+            margin: 2rem auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: var(--bg-color);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Updated Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            right: 20px;
+            top: 100px;
+            z-index: 999;
+            background: var(--primary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <nav>
+      <div id="logo" class="logo" style="background-image: url('Premier Logo - Black.png'); background-size: 90%; background-repeat: no-repeat; background-position: center; width: 120px; height: 60px; display: inline-block;">
+</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#products">Products</a>
+            <a href="#contact">Contact</a>
+            <a href="#toggle"> </a>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Transform Your Space</h1>
+            <p>Discover our premium collection of window curtains designed to elevate your home</p>
+            <button class="cta-btn" onclick="window.location.href='product.html'">Explore Collection</button>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="about-content">
+            <div class="about-image"></div>
+            <div class="about-text">
+                <h2>About Premier Blinds</h2>
+                <p>For over two decades, Premier Blinds has been transforming homes with our premium window treatments. Our passion for design and commitment to quality has made us the leading choice for discerning homeowners.</p>
+                <p>We believe that every window tells a story, and our expert team is here to help you tell yours. With our carefully curated collection and professional installation services, we ensure that each project reflects your unique style and meets your specific needs.</p>
+                <p>Our commitment to excellence extends beyond our products to our customer service, ensuring a seamless experience from selection to installation.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <h2>Our Services</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-ruler"></i>
+                </div>
+                <h3>Custom Measurements</h3>
+                <p>Professional measuring service to ensure perfect fit for your windows.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <h3>Expert Installation</h3>
+                <p>Professional installation by our trained and experienced team.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-paint-brush"></i>
+                </div>
+                <h3>Design Consultation</h3>
+                <p>Personalized design advice to match your style and needs.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-hand-holding-heart"></i>
+                </div>
+                <h3>Maintenance</h3>
+                <p>Regular maintenance and cleaning services for your curtains.</p>
+            </div>
+        </div>
+    </section>
+
+
+  <!-- <section id="products" class="products"> -->
+    <section id="products" class="products">
+      <h2>Our Premium Collection</h2>
+        <div class="product-grid">
+          <div class="product-card">
+              <div class="product-image" style="background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.k_ExA6CQ0SCyJFmZShHhFAHaFM%26pid%3DApi&f=1&ipt=8c2cf1541f7486dc78c3aa53047baee73930079812c7c53523c87e7681c91ffc&ipo=images');"></div>
+                <div class="product-info">
+                <h3>Luxury Velvet Curtains</h3>
+                <p>Premium quality velvet curtains that add elegance to any room</p>
+            </div>
+        </div>
+        <div class="product-card">
+            <div class="product-image" style="background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.o-_Kz8sdFedeOtpYVRjknAHaEK%26pid%3DApi&f=1&ipt=2e29ff57aa98df4b9d3ebaffe4529c928635d93c105883fa8024d3aaa555fc01&ipo=images');"></div>
+            <div class="product-info">
+                <h3>Sheer Elegance</h3>
+                <p>Light and airy curtains perfect for creating a soft ambiance</p>
+            </div>
+        </div>
+        <div class="product-card">
+            <div class="product-image" style="background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.JouZT3UAAb2b1MObYYP9nwHaEo%26pid%3DApi&f=1&ipt=81021019eaeff1756d20bd3630ad5fcded8518c11b4490d938939d18f6d0b5ba&ipo=images');"></div>
+            <div class="product-info">
+                <h3>Blackout Collection</h3>
+                <p>Perfect for bedrooms and media rooms</p>
+            </div>
+        </div>
+          <div class="centered-div"><button class="cta-btn" onclick="window.location.href='product.html'">Explore Collection</button></div>
+      </div>
+    </section>
+
+    <section class="testimonials">
+        <h2>What Our Clients Say</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <p>"The quality of these curtains is exceptional. They've completely transformed our living room!"</p>
+                <h4>- Sarah Johnson</h4>
+            </div>
+            <div class="testimonial-card">
+                <p>"Professional installation and amazing customer service. Highly recommended!"</p>
+                <h4>- Michael Brown</h4>
+            </div>
+            <div class="testimonial-card">
+                <p>"The selection process was so easy, and the results are stunning!"</p>
+                <h4>- Emily Wilson</h4>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <center><h2>Get in Touch</h2><br></center>
+        <form class="contact-form">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="cta-btn">Send Message</button>
+        </form>
+    </section>
+
+    <div class="scroll-top" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+
+    <script>
+
+    // Add Burger Menu Functionality
+    const burgerMenu = document.querySelector('.burger-menu');
+    const navLinks = document.querySelector('.nav-links');
+
+    burgerMenu.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        const icon = burgerMenu.querySelector('i');
+        icon.classList.toggle('fa-bars');
+        icon.classList.toggle('fa-times');
+    });
+
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                navLinks.classList.remove('active');
+                const icon = burgerMenu.querySelector('i');
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-times');
+            }
+        });
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768 &&
+            !e.target.closest('.nav-links') &&
+            !e.target.closest('.burger-menu') &&
+            navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+            const icon = burgerMenu.querySelector('i');
+            icon.classList.add('fa-bars');
+            icon.classList.remove('fa-times');
+        }
+    });
+    // Previous JavaScript continues...
+        // Theme Toggle
+        // Theme Toggle
+function toggleTheme() {
+    const body = document.body;
+    const themeToggle = document.querySelector('.theme-toggle i');
+    const logoDiv = document.getElementById('logo'); // Target the logo div
+
+    if (body.getAttribute('data-theme') === 'dark') {
+        // Switch to light theme
+        body.removeAttribute('data-theme');
+        themeToggle.className = 'fas fa-moon';
+        logoDiv.style.backgroundImage = "url('Premier Logo - Black.png')"; // Black logo for light theme
+    } else {
+        // Switch to dark theme
+        body.setAttribute('data-theme', 'dark');
+        themeToggle.className = 'fas fa-sun';
+        logoDiv.style.backgroundImage = "url('Premier Logo - White.png')"; // White logo for dark theme
+    }
+}
+
+        // Scroll to Top
+        window.onscroll = function() {
+            const scrollTop = document.querySelector('.scroll-top');
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollTop.classList.add('visible');
+            } else {
+                scrollTop.classList.remove('visible');
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Smooth Scroll for Navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animate on Scroll
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.product-card, .testimonial-card');
+
+            elements.forEach(element => {
+                const position = element.getBoundingClientRect();
+
+                if(position.top < window.innerHeight) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        }
+
+        window.addEventListener('scroll', animateOnScroll);
+    </script>
+</body>
+</html>
